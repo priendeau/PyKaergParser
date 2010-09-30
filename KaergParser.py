@@ -174,9 +174,9 @@ class AldderIdes():
       ListProc=[ '__MainRegistryAttr__', 'QueryUrl' ,'LxmlModuleFromString' , 'CheckModuleFormPost',
              'ParseForm'  ]
       - This case will stop at the ParseForm, before sending information, It's good inspecting... Some
-      Action can be relative and may not hold website... Use the JobboomConf Example with the previous version
-      to see the problems, The actual 'Enhancing' arbritrary use a try-except inside the SendForm to
-      re-craft the action...
+      Action can be relative and may not hold website... Use the JobboomConf Example with the previous
+      version to see the problems, The actual 'Enhancing' arbritrary use a try-except inside the
+      SendForm to re-craft the action...
 
       Hold your Breath... Old story of 2004, a Dude guy beleiving in the Cross-script scripting thru a
       anomalies tested here @VDL2 session during 2003/2004... Why a guy want  explicitly your computer
@@ -187,6 +187,7 @@ class AldderIdes():
   ListProc=[ '__MainRegistryAttr__', 'QueryUrl' ,'LxmlModuleFromString' , 'CheckModuleFormPost',
              'ParseForm' ,'SendForm' ,'__TransitHtmlFile__'  ]
   ListProcName=[ 'ListProc' ]
+  URI='http://'
   UrlNameAttr='Url'  
   ScanHtmlValueWith='name'
 
@@ -308,7 +309,7 @@ class AldderIdes():
       ConfirmHost=Aurl.get_host()
     except ValueError:
       Burl=urllib2.Request( self.Url )
-      self.WebBuffer['lxml'].forms[0].action = 'http://' + Burl.get_host() + self.WebBuffer['lxml'].forms[0].action
+      self.WebBuffer['lxml'].forms[0].action = self.URI + Burl.get_host() + self.WebBuffer['lxml'].forms[0].action
 
     self.WebBuffer['lxml_result'] = parse( submit_form( self.WebBuffer['lxml'].forms[0] ) ).getroot()
 
@@ -375,5 +376,5 @@ if __name__ == '__main__':
                               QueryOrderConf=['query'],
                               )
 ### Prior to keep all thoses line under the __name__.__eq__( '__main__' ), form I invite people 
-### trnasforming it into descent class integration function.
+### re-code into descent class integration function.
 ### 
