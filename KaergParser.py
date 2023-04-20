@@ -3,8 +3,23 @@
 ### Descendant/Parser with executive clauses...
 ###
 
-import  sys, os, re, urllib, urllib2, cStringIO, uuid, pynav, passogva, random
-from    pynav   import Pynav
+import  sys
+
+if sys.version_info.major < 3 :
+  import urllib.request as Request
+  import urllib2 
+  from StringIO import StringIO
+  import cStringIO
+  import pynav
+  from  pynav import Pynav
+else:
+  import  os, re, uuid, passogva, random
+  from io import StringIO ## for Python 3
+  import pynav
+  from pynav import Browser
+  import urllib, urllib.request
+  import urllib3
+
 import  lxml
 from    uuid    import uuid4
 
@@ -36,7 +51,7 @@ def RandomParamMaker( defaultMinArg=3   , defaultMaxArg=6                 ,  Max
         EndCopyPart=random.randint( 1, len( StreamVariableReduc )-1 )
         ParamDict[Item]=StreamVariableReduc[StartCopyPart:EndCopyPart]
     if CountInnerLoop >= DefaultDecreaseMaxArgFactor:
-      print "Present Pair Value <<%d, %d >> exceed DecreaseMaxArgFactor : %d \n\tCurrent DictKey:[ %s ]" % ( defaultMinArg , defaultMaxArg, DefaultDecreaseMaxArgFactor, ParamDict.keys() )
+      print( "Present Pair Value <<%d, %d >> exceed DecreaseMaxArgFactor : %d \n\tCurrent DictKey:[ %s ]" % ( defaultMinArg , defaultMaxArg, DefaultDecreaseMaxArgFactor, ParamDict.keys() ) ) 
       if defaultMinArg >= defaultMaxArg:
         SaveMinArg+=1
         SaveMaxArg+=1
@@ -51,7 +66,7 @@ def RandomParamMaker( defaultMinArg=3   , defaultMaxArg=6                 ,  Max
           defaultMinArg=( defaultMinArg - ( MaxArgFactorInfl / 2 ) )
         CountPerInflation=0
     CountInnerLoop+=1
-  print "Returned Dict:[ %s ]" % ( ParamDict.keys() )
+  print( "Returned Dict:[ %s ]" % ( ParamDict.keys() ) ) 
   return ParamDict
 
 def GetListRandSorted( minRange=3, maxRange=32, lengthRange=3 ):
@@ -64,7 +79,7 @@ def GetListRandSorted( minRange=3, maxRange=32, lengthRange=3 ):
       valDict.append( valueRand )
       ValRangeCount+=1
   valDict.sort()
-  print "Returned List[ %s ]" % ( valDict )
+  print( "Returned List[ %s ]" % ( valDict ) ) 
   return valDict
 
 class ObjectReturn( object ):
@@ -96,14 +111,14 @@ def GetLinkFromRegExpSpec( RegExpList, ListLink, DictValueSendOnPageRequest ):
     for IntItemLink in range( 0 , len( ListLink ) ):
       if RegExpList[IntItemRegTest].search( ListLink[IntItemLink] ) != None:
         if PrintLinkRegExrSearch:
-          print "\n\tMatch Expression %d with item : %s " % ( IntItemRegTest, ListLink[IntItemLink] )
+          print( "\n\tMatch Expression %d with item : %s " % ( IntItemRegTest, ListLink[IntItemLink] ) ) 
         if not IntItemLink in LinkMatchRegExp.keys():
           LinkMatchRegExp[IntItemLink]=dict()
         LinkMatchRegExp[IntItemLink][IntItemRegTest]=True
 
   for itemKey in LinkMatchRegExp.keys():
     if len( LinkMatchRegExp[itemKey].keys() ) == len( RegExpList ):
-      print "Loging Preference : %s " % ( ListLink[itemKey] )
+      print( "Loging Preference : %s " % ( ListLink[itemKey] ) ) 
       UrlQuery=ListLink[itemKey]
   return UrlQuery
 
@@ -111,7 +126,7 @@ def GetLinkFromRegExpSpec( RegExpList, ListLink, DictValueSendOnPageRequest ):
 class Kaerg():
   @staticmethod
   def __AddMainDict__( ClassName, Item, ArgDict ):
-    print "from classname < %s <%s; %s>> " % ( ClassName.__name__ , Item , ArgDict[Item] )
+    print( "from classname < %s <%s; %s>> " % ( ClassName.__name__ , Item , ArgDict[Item] ) ) 
     __builtins__.setattr( ClassName , Item,  ArgDict[Item] )
     
   @classmethod
@@ -121,13 +136,13 @@ class Kaerg():
 
 class NNDBConf():
   Post={  1:{ 'name':('query'),
-              'value':('paris hilton'),
+              'value':('hotel hilton not in paris'),
               'form_id':(0)} }
          
   def __init__( self, BindValue=False, **Kargs ):
     Kaerg.Parser( self.__class__ , BindValue, **Kargs )
   
-class JobboomConf():
+class JobConf():
   Post={  1:{ 'name':('username'),
               'value':(''),
               'form_id':(1) },
@@ -176,18 +191,12 @@ class AldderIdes():
       - This case will stop at the ParseForm, before sending information, It's good inspecting... Some
       Action can be relative and may not hold website... Use the JobboomConf Example with the previous
       version to see the problems, The actual 'Enhancing' arbritrary use a try-except inside the
-      SendForm to re-craft the action...
-
-      Hold your Breath... Old story of 2004, a Dude guy beleiving in the Cross-script scripting thru a
-      anomalies tested here @VDL2 session during 2003/2004... Why a guy want  explicitly your computer
-      access, when you decide to remove-it after seeing nobody asking to get a Linux-Shell for testing
-      purposes... 
-      
+      SendForm to re-craft the action...      
   """
   ListProc=[ '__MainRegistryAttr__', 'QueryUrl' ,'LxmlModuleFromString' , 'CheckModuleFormPost',
              'ParseForm' ,'SendForm' ,'__TransitHtmlFile__'  ]
   ListProcName=[ 'ListProc' ]
-  URI='http://'
+  URI='http://www.google.ca/search?client=python3.9-interface&q='
   UrlNameAttr='Url'  
   ScanHtmlValueWith='name'
 
@@ -227,7 +236,7 @@ class AldderIdes():
     self.__RegisterDef__()
     for ItemProcExec in self.ListProcName:
       for ItemListed in getattr( self, ItemProcExec ):
-        print "Executing Definition %s" % ( ItemListed )
+        print( "Executing Definition %s" % ( ItemListed ) ) 
         getattr( self, ItemListed )()
     
   def __init__( self, BindValue=False, **Kargs ):
@@ -259,7 +268,7 @@ class AldderIdes():
     ModuleName=getattr( self, self.ConfigurationFormName )
     if not hasattr( ModuleName , self.FormPostName ):
       StrErrorMsg = "No Attribute %s, Dict() inside Configuration Class %s" % ( FormPostName , self.ObjectQueryName )
-      raise self.Ides.ConfPostDictNotAvailable, StrErrorMsg
+      raise self.Ides.ConfPostDictNotAvailable( StrErrorMsg ) 
 
   def LoopItemLxmlForm( self ):
     self.FuncName=self.LoopItemLxmlForm.__name__
@@ -305,11 +314,17 @@ class AldderIdes():
     self.FuncName=self.SendForm.__name__
     self.__RegisterDef__()
     try:
-      Aurl=urllib2.Request( self.WebBuffer['lxml'].forms[0].action )
+      if sys.version_info < (3,):
+        Aurl=urllib2.Request( self.WebBuffer['lxml'].forms[0].action )
+      else:
+        Aurl=Request.Request( url=self.Url , data=self.WebBuffer['lxml'].forms[0].action )
       ConfirmHost=Aurl.get_host()
     except ValueError:
-      Burl=urllib2.Request( self.Url )
       self.WebBuffer['lxml'].forms[0].action = self.URI + Burl.get_host() + self.WebBuffer['lxml'].forms[0].action
+      if sys.version_info < (3,):
+        Burl=urllib2.Request( self.Url )
+      else:
+        Burl=Request.Request( url=self.Url, data= self.WebBuffer['lxml'].forms[0].action)
 
     self.WebBuffer['lxml_result'] = parse( submit_form( self.WebBuffer['lxml'].forms[0] ) ).getroot()
 
@@ -317,7 +332,7 @@ class AldderIdes():
     self.FuncName=self.__TransitHtmlFile__.__name__
     self.__RegisterDef__()
     if os.path.exists( self.FileNameHtmlTransit ):
-      print "Removing Existing FileName : %s" % ( self.FileNameHtmlTransit )
+      print( "Removing Existing FileName : %s" % ( self.FileNameHtmlTransit ) ) 
       os.remove( self.FileNameHtmlTransit )
     self.FileHandlerHtml=open( self.FileNameHtmlTransit, 'w+' )
     self.FileHandlerHtml.writelines( tostring( self.WebBuffer['lxml_result'] ) )
@@ -328,10 +343,10 @@ class AldderIdes():
     self.__RegisterDef__()
     if not hasattr( self, self.UrlNameAttr ):
       StrErrorMsg="No Valid %s Attribute found inside object %s" % ( self.UrlNameAttr , self.__class__.__name__ )
-      raise self.Ides.NoUrlVariableFound, StrErrorMsg
+      raise self.Ides.NoUrlVariableFound( StrErrorMsg ) 
     if getattr( self, self.UrlNameAttr ).__eq__( '' ):
       StrErrorMsg="Invalid or empty Attribute %s found inside object %s" % ( self.UrlNameAttr , self.__class__.__name__ )
-      raise self.Ides.EmptyUrlVariableFound, StrErrorMsg
+      raise self.Ides.EmptyUrlVariableFound( StrErrorMsg ) 
     self.WebBuffer['buffer']=self.MiniWebBrowser.go( self.Url )
 
 if __name__ == '__main__':
@@ -341,27 +356,37 @@ if __name__ == '__main__':
   DictSendMaker=True
   PrintLinkRegExrSearch=False
   PrintParamSend=False
-  UrlTest='http://www.jobboom.com/fr/ouvrir-une-session'
+  UrlTest='http://'
   UrlQuery=None
-  RegExpList=[ re.compile(r'(?ui)fr_CA'),
+  RegExpList=[ re.compile(r'(?ui)FR_CA'),
                re.compile(r'(?ui)QC')  ]
   ATestObj=None
 
   if TestObjectReturn:
-    ATestObj=ObjectReturn( WebObject=pynav.Pynav(),
+    if sys.version_info.major < 3:
+      ATestObj=ObjectReturn( WebObject=pynav.Pynav(),
                            ListRegExp=RegExpList,
                            ListLink=list(),
                            DictValueSendOnPageRequest={ 'UnApiEn':'Python','isAQuestion':'True'},
                            valDict=list( GetListRandSorted( 3, 12 , 3 ) ) )
-
+    else:
+      ATestObj=ObjectReturn( WebObject=Browser(),
+                           ListRegExp=RegExpList,
+                           ListLink=list(),
+                           DictValueSendOnPageRequest={ 'UnApiEn':'Python','isAQuestion':'True'},
+                           valDict=list( GetListRandSorted( 3, 12 , 3 ) ) )
+      
   if DictSendMaker:
     ATestObj.DictValueSendOnPageRequest.update(
       RandomParamMaker( ATestObj.valDict[0] ,ATestObj.valDict[1] ,ATestObj.valDict[2] ) )
     
   if LinkClassification:
     if PrintParamSend:
-      print "Parameter sended : [ %s ] " % ( ATestObj.DictValueSendOnPageRequest )
-    FxmlHandler=cStringIO.StringIO( ATestObj.WebObject.go( UrlTest, ATestObj.DictValueSendOnPageRequest ) )
+      print( "Parameter sended : [ %s ] " % ( ATestObj.DictValueSendOnPageRequest ) )
+    if sys.version_info.major < 3:
+      FxmlHandler=cStringIO.StringIO( ATestObj.WebObject.go( UrlTest, ATestObj.DictValueSendOnPageRequest ) )
+    else:
+      FxmlHandler=StringIO( ATestObj.WebObject.go( UrlTest, ATestObj.DictValueSendOnPageRequest ) )
     ATestObj.ListLink=ATestObj.WebObject.get_all_links()
     
     LxmlObj=fromstring( FxmlHandler.read() )
@@ -372,7 +397,7 @@ if __name__ == '__main__':
                               MiniWebBrowser=Pynav(),
                               WebBuffer=dict(),
                               Url=UrlQuery,
-                              QueryConf=JobboomConf(),
+                              QueryConf=JobConf(),
                               QueryOrderConf=['query'],
                               )
 ### Prior to keep all thoses line under the __name__.__eq__( '__main__' ), form I invite people 
